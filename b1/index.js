@@ -9,7 +9,7 @@ const privatekey = process.env.PRIVATE_KEY;
 const web3Api = "https://sepolia.infura.io/v3/" + process.env.INFURA_ID;
 
 // Load contract
-const source = fs.readFileSync("Incrementer.sol", "utf8");
+const source = fs.readFileSync("./b1/Incrementer.sol", "utf8");
 
 // compile solidity
 const input = {
