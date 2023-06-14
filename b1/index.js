@@ -1,12 +1,10 @@
 const Web3 = require("web3");
 const solc = require("solc");
 const fs = require("node:fs");
-// Get privatekey from environment
-require("dotenv").config();
-const privatekey = process.env.PRIVATE_KEY;
 
-// const web3Api = "https://goerli.infura.io/v3/" + process.env.INFURA_ID;
-const web3Api = "https://sepolia.infura.io/v3/" + process.env.INFURA_ID;
+require("dotenv").config();
+
+const privatekey = process.env.PRIVATE_KEY;
 
 // Load contract
 const source = fs.readFileSync("./b1/Incrementer.sol", "utf8");
@@ -36,6 +34,9 @@ const bytecode = contractFile.evm.bytecode.object;
 const abi = contractFile.abi;
 
 // Create web3 with goerli provider，you can change goerli to other testnet
+// const web3Api = "https://goerli.infura.io/v3/" + process.env.INFURA_ID;
+const web3Api = "https://sepolia.infura.io/v3/" + process.env.INFURA_ID;
+
 const web3 = new Web3(web3Api);
 
 // Create account from privatekey
@@ -66,8 +67,6 @@ const Deploy = async () => {
     },
     account_from.privateKey
   );
-
-  console.log("deployTransaction", deployTransaction);
 
   const deployReceipt = await web3.eth.sendSignedTransaction(
     deployTransaction.rawTransaction
