@@ -1,6 +1,6 @@
-### 合约编译及部署
+### 0x01 合约编译及部署
 
-#### 合约
+#### 1. 合约
 
 ##### 合约 contract
 
@@ -40,7 +40,7 @@ const bytecode = contractFile.evm.bytecode.object;
 const abi = contractFile.abi;
 ```
 
-#### Web3
+#### 2. Web3
 
 ##### web3 对象
 
@@ -62,7 +62,7 @@ const account_from = {
 };
 ```
 
-#### 部署合约
+#### 3. 部署合约
 
 合约实例
 
@@ -100,34 +100,104 @@ const deployReceipt = await web3.eth.sendSignedTransaction(
 
 `https://goerli.etherscan.io/address/${deployReceipt.contractAddress}`
 
-### 交易和事件
+### 0x02 交易和事件
 
 > 对交易进行签名，发送，接收交易回执，验证交易执行结果
 
 > 对一个事件进行一次或多次监听
 
-#### 加载合约实例
+#### 1. 加载合约实例
 
 https://sepolia.etherscan.io/address/0x970d40f94dd0ea7B80D658988679658D643f6c52
 
 3688266
 
 ```js
-
+let incrementer = new web3.eth.Contract(abi, createReceipt.contractAddress);
 ```
 
-#### 与合约交互
+#### 2. 与合约交互
 
 在拥有一个已经上链的合约实例后, 就可以和合约进行交互
 
 合约接口分为只读和交易接口, 其中只读接口不会产生区块, 而交易接口调用会在区块链网络上产生相应的区块数据
 
-#### 构造交易
+```js
+// 只读
+let number = await incrementer.methods.getNumber().call();
+console.log(`The current number stored is: ${number}`);
 
-#### 发送交易并获取回执
+// 交易
+let incrementTx = incrementer.methods.increment(5);
+let incrementTransaction = await web3.eth.accounts.signTransaction(
+  {
+    to: createReceipt.contractAddress,
+    data: incrementTx.encodeABI(),
+    gas: 8000000,
+  },
+  account_from.privateKey
+);
+const incrementReceipt = await web3.eth.sendSignedTransaction(
+  incrementTransaction.rawTransaction
+);
+```
 
-#### 监听事件
+构造交易 -> 发送交易并获取回执
 
-一次性事件监听器
+#### 3. 监听事件
 
-持续性事件监听器
+- 一次性事件监听器
+- 持续性事件监听器
+
+```js
+const web3Socket = new Web3(
+  "wss://sepolia.infura.io/ws/v3/" + process.env.INFURA_ID
+);
+
+incrementer.once("Increment", (error, event) => {
+  console.log("I am a onetime event listner, I am going to die now");
+});
+```
+
+```js
+web3Socket.eth
+  .subscribe(
+    "logs",
+    {
+      address: createReceipt.contractAddress,
+      topics: [],
+    },
+    (error, result) => {
+      if (error) {
+        console.error(error);
+      }
+    }
+  )
+  .on("data", (event) => {
+    console.log("New event: ", event);
+  })
+  .on("error", (error) => {
+    console.error("Error: ", error);
+  });
+
+web3Socket.eth.clearSubscriptions();
+```
+
+```js
+const pastEvents = await incrementer.getPastEvents("Increment", {
+  fromBlock: deployedBlockNumber,
+  toBlock: "latest",
+});
+
+pastEvents.map((event) => {
+  console.log(event);
+});
+```
+
+- 错误处理
+
+```js
+await web3.eth
+  .sendSignedTransaction(incrementTransaction.rawTransaction)
+  .on("error", console.error);
+```
