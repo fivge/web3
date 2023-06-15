@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {},
   "dependencies": {
+    "@openzeppelin/contracts": "^4.9.1",
     "dotenv": "^16.0.3",
     "ganache": "^7.8.0",
     "solc": "^0.8.19",
