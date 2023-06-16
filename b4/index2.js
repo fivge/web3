@@ -28,22 +28,15 @@ let wallet = new ethers.Wallet(account_from.privateKey, provider);
    -- Deploy Contract --
 */
 // Create Contract Instance with Signer
-const deployContractIns = new ethers.ContractFactory(abi, bytecode, wallet);
 
 const Trans = async () => {
   console.log('===============================1. Deploy Contract');
   console.log(`Attempting to deploy from account: ${wallet.address}`);
 
   // Send Tx (Initial Value set to 5) and Wait for Receipt
-  const deployedContract = await deployContractIns.deploy(
-    'HAHAHA',
-    'HA',
-    1,
-    100000000,
-    { gasLimit: 8000000 }
-  );
-  await deployedContract.waitForDeployment();
-  console.log(`Contract deployed at address: ${await deployedContract.getAddress()}`);
+  const deployedContract = {
+    getAddress: () => "0x1F144D992dBab38FA27fE35711f608709ea85b68"
+  };
 
   /*
    -- Send Function --
@@ -81,7 +74,7 @@ const Trans = async () => {
     '===============================3. Call Read Interface Of Contract'
   );
   const providerContract = new ethers.Contract(
-    await deployedContract.getAddress(),
+    deployedContract.getAddress(),
     abi,
     provider
   );
@@ -116,7 +109,7 @@ const Trans = async () => {
   // Listen to events with filter
   let topic = ethers.id('Transfer(address,address,uint256)');
   let filter = {
-    address: await deployedContract.getAddress(),
+    address: deployedContract.address,
     topics: [topic],
     fromBlock: await provider.getBlockNumber(),
   };
