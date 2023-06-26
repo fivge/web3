@@ -161,3 +161,13 @@ TODO
 ---
 
 <https://docs.metamask.io/wallet/get-started/set-up-dev-environment/>
+
+## ipfs erc721
+
+- js <https://github.com/ipfs/helia>
+
+---
+
+<https://ipfs.tech/>
+
+<https://developers.cloudflare.com/web3/ipfs-gateway/concepts/ipfs/>
