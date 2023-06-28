@@ -17,6 +17,7 @@ WIP
 | start   | [start](./doc/start.md)     |     |
 | ethers  | [ethers](./doc/ethers.md)   |     |
 | hardhat | [hardhat](./doc/hardhat.md) |     |
+| helia   | [helia](./doc/helia.md)     |     |
 
 ---
 
