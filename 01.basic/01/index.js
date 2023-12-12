@@ -5,9 +5,12 @@ const fs = require("node:fs");
 require("dotenv").config();
 
 const privatekey = process.env.PRIVATE_KEY;
+const INFURA_ID = process.env.INFURA_ID
 
+//#region 0
 // Load contract
-const source = fs.readFileSync("./b1/Incrementer.sol", "utf8");
+// TODO 使用相对路径
+const source = fs.readFileSync("01.basic/01/Incrementer.sol", "utf8");
 
 // compile solidity
 const input = {
@@ -32,23 +35,26 @@ const contractFile = tempFile.contracts["Incrementer.sol"]["Incrementer"];
 // Get bin & abi
 const bytecode = contractFile.evm.bytecode.object;
 const abi = contractFile.abi;
+//#endregion
 
-// Create web3 with goerli provider，you can change goerli to other testnet
-// const web3Api = "https://goerli.infura.io/v3/" + process.env.INFURA_ID;
-const web3Api = "https://sepolia.infura.io/v3/" + process.env.INFURA_ID;
+//#region 1
+// Create web3 
+const web3Api = "https://sepolia.infura.io/v3/" + INFURA_ID;
 
 const web3 = new Web3(web3Api);
+//#endregion
 
+//#region 2
 // Create account from privatekey
 const account = web3.eth.accounts.privateKeyToAccount(privatekey);
 const account_from = {
   privateKey: privatekey,
   accountAddress: account.address,
 };
+//#endregion
 
-/*
-   -- Deploy Contract --
-*/
+//#region 3
+/** Deploy Contract */
 const Deploy = async () => {
   // Create contract instance
   const deployContract = new web3.eth.Contract(abi);
@@ -72,9 +78,7 @@ const Deploy = async () => {
     deployTransaction.rawTransaction
   );
 
-  // Your deployed contrac can be viewed at: https://goerli.etherscan.io/address/${deployReceipt.contractAddress}
-  // You can change goerli in above url to your selected testnet.
-  // sepolia
+  // Your deployed contrac can be viewed at: https://sepolia.etherscan.io/address/${deployReceipt.contractAddress}
   console.log(`Contract deployed at address: ${deployReceipt.contractAddress}`);
 };
 
@@ -86,3 +90,4 @@ Deploy()
     console.error(error);
     process.exit(1);
   });
+//#endregion
