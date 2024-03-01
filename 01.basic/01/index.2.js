@@ -2,43 +2,52 @@ const Web3 = require("web3");
 const contractOfIncrementer = require("./compile");
 
 require("dotenv").config();
-const privatekey = process.env.PRIVATE_KEY;
+
+const PRIVATE_KEY = process.env.PRIVATE_KEY;
+const INFURA_ID = process.env.INFURA_ID;
+
+const BLOCK_NUMBER = 5392983;
+const CONTRACT_ADDRESS = "0xc2d58E2a78bEc629C49FdD7844329C5931f4Fe7b";
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-const providerRPC = {
-  development: "https://sepolia.infura.io/v3/" + process.env.INFURA_ID,
-  moonbase: "https://rpc.testnet.moonbeam.network",
-};
-const web3 = new Web3(providerRPC.development);
-
-// Create account with privatekey
-const account = web3.eth.accounts.privateKeyToAccount(privatekey);
-const account_from = {
-  privateKey: privatekey,
-  accountAddress: account.address,
-};
-
+//#region 0
 // Get abi & bin
 const bytecode = contractOfIncrementer.evm.bytecode.object;
 const abi = contractOfIncrementer.abi;
+//#endregion
+
+//#region 1
+// Create web3
+const web3Api = "https://sepolia.infura.io/v3/" + INFURA_ID;
+
+const web3 = new Web3(web3Api);
+//#endregion
+
+//#region 2
+// Create account from privatekey
+const account = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY);
+const account_from = {
+  privateKey: PRIVATE_KEY,
+  accountAddress: account.address,
+};
+//#endregion
 
 const Trans = async () => {
   const createReceipt = {
-    blockNumber: 3688266,
-    contractAddress: "0x970d40f94dd0ea7B80D658988679658D643f6c52",
+    blockNumber: BLOCK_NUMBER,
+    contractAddress: CONTRACT_ADDRESS,
   };
 
-  const deployedBlockNumber = createReceipt.blockNumber;
-
+  //#region 3 交易 与合约交互
   let incrementer = new web3.eth.Contract(abi, createReceipt.contractAddress);
 
   let number = await incrementer.methods.getNumber().call();
   console.log(`The current number stored is: ${number}`);
 
-  const _value = 3;
+  const _value = 5;
   let incrementTx = incrementer.methods.increment(_value);
   let incrementTransaction = await web3.eth.accounts.signTransaction(
     {
@@ -51,35 +60,42 @@ const Trans = async () => {
   const incrementReceipt = await web3.eth.sendSignedTransaction(
     incrementTransaction.rawTransaction
   );
+  console.log(`Tx successful with hash: ${incrementReceipt.transactionHash}`);
 
   number = await incrementer.methods.getNumber().call();
   console.log(`After increment, the current number stored is: ${number}`);
 
-  // const resetTx = incrementer.methods.reset();
-  // const resetTransaction = await web3.eth.accounts.signTransaction(
-  //   {
-  //     to: createReceipt.contractAddress,
-  //     data: resetTx.encodeABI(),
-  //     gas: 8000000,
-  //   },
-  //   account_from.privateKey
-  // );
-  // const resetcReceipt = await web3.eth.sendSignedTransaction(
-  //   resetTransaction.rawTransaction
-  // );
-
-  // number = await incrementer.methods.getNumber().call();
-  // console.log(`After reset, the current number stored is: ${number}`);
-
-  const web3Socket = new Web3(
-    "wss://sepolia.infura.io/ws/v3/" + process.env.INFURA_ID
+  const resetTx = incrementer.methods.reset();
+  const resetTransaction = await web3.eth.accounts.signTransaction(
+    {
+      to: createReceipt.contractAddress,
+      data: resetTx.encodeABI(),
+      gas: 8000000,
+    },
+    account_from.privateKey
   );
+  const resetcReceipt = await web3.eth.sendSignedTransaction(
+    resetTransaction.rawTransaction
+  );
+  console.log(`Tx successful with hash: ${resetcReceipt.transactionHash}`);
 
+  number = await incrementer.methods.getNumber().call();
+  console.log(`After reset, the current number stored is: ${number}`);
+  //#endregion
+
+  //#region 4 监听事件
+  const web3Socket = new Web3("wss://sepolia.infura.io/ws/v3/" + INFURA_ID);
+
+  // 一次性事件监听器
   incrementer.once("Increment", (error, event) => {
     console.log("I am a onetime event listner, I am going to die now");
   });
 
-  // listen to Increment event continuously
+  incrementer.events.Increment(() => {
+    console.log("I am a longlive event listener, I get a event now");
+  });
+
+  // 持续性事件监听器
   web3Socket.eth
     .subscribe(
       "logs",
@@ -109,7 +125,6 @@ const Trans = async () => {
       },
       account_from.privateKey
     );
-
     await web3.eth.sendSignedTransaction(incrementTransaction.rawTransaction);
 
     console.log("Waiting for events");
@@ -122,15 +137,17 @@ const Trans = async () => {
     }
   }
 
+  // getPastEvents
   const pastEvents = await incrementer.getPastEvents("Increment", {
-    fromBlock: deployedBlockNumber,
+    fromBlock: createReceipt.blockNumber,
     toBlock: "latest",
   });
-
+  console.log("pastEvents:");
   pastEvents.map((event) => {
     console.log(event);
   });
 
+  // 错误处理
   incrementTx = incrementer.methods.increment(0);
   incrementTransaction = await web3.eth.accounts.signTransaction(
     {
@@ -140,7 +157,6 @@ const Trans = async () => {
     },
     account_from.privateKey
   );
-
   await web3.eth
     .sendSignedTransaction(incrementTransaction.rawTransaction)
     .on("error", console.error);

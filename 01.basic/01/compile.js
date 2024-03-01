@@ -1,7 +1,7 @@
 const fs = require("fs");
 const solc = require("solc");
 
-const source = fs.readFileSync("./b2/Incrementer.sol", "utf8");
+const source = fs.readFileSync("contracts/Incrementer.sol", "utf8");
 
 const input = {
   language: "Solidity",
