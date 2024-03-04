@@ -1,8 +1,7 @@
 const fs = require("fs");
 const solc = require("solc");
 
-// Get Path and Load Contract
-const source = fs.readFileSync("./b3/SimpleToken.sol", "utf8");
+const source = fs.readFileSync("contracts/SimpleToken.sol", "utf8");
 
 function findImports(path) {
   if (fs.existsSync(path)) {
@@ -18,8 +17,6 @@ function findImports(path) {
   }
 }
 
-// Compile Contract
-// https://docs.soliditylang.org/en/v0.8.0/using-the-compiler.html#compiler-input-and-output-json-description
 const input = {
   language: "Solidity",
   sources: {
@@ -41,5 +38,4 @@ const tempFile = JSON.parse(
 );
 const contractFile = tempFile.contracts["SimpleToken.sol"]["SimpleToken"];
 
-// Export Contract Data
 module.exports = contractFile;

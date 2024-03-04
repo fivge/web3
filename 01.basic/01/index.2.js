@@ -41,7 +41,7 @@ const Trans = async () => {
     contractAddress: CONTRACT_ADDRESS,
   };
 
-  //#region 3 交易 与合约交互
+  //#region 3 交易 与合约交互 💖
   let incrementer = new web3.eth.Contract(abi, createReceipt.contractAddress);
 
   let number = await incrementer.methods.getNumber().call();
@@ -83,7 +83,7 @@ const Trans = async () => {
   console.log(`After reset, the current number stored is: ${number}`);
   //#endregion
 
-  //#region 4 监听事件
+  //#region 4 监听事件 💖
   const web3Socket = new Web3("wss://sepolia.infura.io/ws/v3/" + INFURA_ID);
 
   // 一次性事件监听器

@@ -3,6 +3,8 @@ const solc = require("solc");
 
 const source = fs.readFileSync("contracts/Incrementer.sol", "utf8");
 
+// Compile Contract
+// https://docs.soliditylang.org/en/v0.8.0/using-the-compiler.html#compiler-input-and-output-json-description
 const input = {
   language: "Solidity",
   sources: {

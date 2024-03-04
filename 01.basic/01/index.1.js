@@ -52,7 +52,7 @@ const account_from = {
 };
 //#endregion
 
-//#region 3
+//#region 3 💖
 /** Deploy Contract */
 const Deploy = async () => {
   // Create contract instance
