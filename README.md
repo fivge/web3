@@ -2,19 +2,10 @@
 
 WIP
 
-|       |                  |                                                |
-| ----- | ---------------- | ---------------------------------------------- |
-| ✔️    |                  | b1 b2 b3 https://doc.0x64.in/docs/Web3/basic/  |
-| tools | truffle          | b4                                             |
-| tools | hardhat          | [b7...](https://github.com/fivge/hardhad-demo) |
-|       | ethers.js Waffle | b5 b6                                          |
-|       |                  |                                                |
-
 ## doc
 
 |         |                             |     |
 | ------- | --------------------------- | --- |
-| ethers  | [ethers](./doc/ethers.md)   |     |
 | hardhat | [hardhat](./doc/hardhat.md) |     |
 | helia   | [helia](./doc/helia.md)     |     |
 
@@ -38,5 +29,11 @@ WIP
 
 - web3js
   https://web3js.org/
-- web3js 4.x
+  web3js 4.x
 - sol 语法
+  https://github.com/AmazingAng/WTF-Solidity
+- https://learnblockchain.cn/manuals
+- viem
+- https://eth-sepolia.g.alchemy.com/v2/<key>
+- ethers.js
+  https://learnblockchain.cn/ethers_v5/
