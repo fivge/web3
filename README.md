@@ -4,12 +4,7 @@ WIP
 
 ## doc
 
-|         |                             |     |
-| ------- | --------------------------- | --- |
-| hardhat | [hardhat](./doc/hardhat.md) |     |
-| helia   | [helia](./doc/helia.md)     |     |
-
----
+[task1](./task1.md)
 
 ##### links
 
