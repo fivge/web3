@@ -8,14 +8,26 @@
 | ~~06~~   | Waffle                                                                 | 不使用测试库先     | ❌  |
 | 07 08    | https://doc.0x64.in/docs/Web3/basic/hardhat                            | hardhat            |     |
 | ~~08~~   |                                                                        | The Graph          |     |
-| 09       | https://doc.0x64.in/docs/Web3/basic/wallet                             | wallet             |     |
-| 09 11    | https://github.com/fivge/tour-of-react/tree/master/src/app/routes/dapp |                    |     |
+| 09 11    | https://doc.0x64.in/docs/Web3/basic/wallet                             | wallet             |     |
+| 09 11    | https://github.com/fivge/tour-of-react/tree/master/src/app/routes/dapp | wallet             |     |
 | 10       | ipfs                                                                   | 使用`helia`        |     |
 |          |                                                                        |                    |     |
 |          |                                                                        |                    |     |
 |          |                                                                        |                    |     |
 |          |                                                                        |                    |     |
-|          |                                                                        |                    |     |
+
+---
+
+|       |                                                        |                                                      |     |
+| ----- | ------------------------------------------------------ | ---------------------------------------------------- | --- |
+| 12    | https://docs.openzeppelin.com/contracts/5.x/crowdsales | Crowdsales 众筹                                      | ❌  |
+| 13    |                                                        | EtherDelta 传统交易所 / Uniswap 去中心化交易所 / AMM | ❌  |
+| 14    |                                                        | 喂价 和 随机数 预言机                                | ❌  |
+| 15    |                                                        | 基于 chainlink vrf 的 nft 盲盒设计                   | ❌  |
+| 16    |                                                        | nft 资产拍卖                                         | ❌  |
+| 17    |                                                        | 钱包开发                                             | ❌  |
+| 18 19 |                                                        | web3.py                                              | ❌  |
+| 20    |                                                        | Flashloans 闪电贷                                    | ❌  |
 
 ---
 
